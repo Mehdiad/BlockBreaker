@@ -14,7 +14,10 @@ public class BallScript : MonoBehaviour
     [SerializeField]
     float launchPosY = 15f;
 
+    [SerializeField]
+    AudioClip[] ballSounds;
 
+    AudioSource myAudioSource;
 
     Vector2 paddleToBallVector;
     bool hasStarted = false;
@@ -25,6 +28,7 @@ public class BallScript : MonoBehaviour
     void Start()
     {
         paddleToBallVector = transform.position - paddle.transform.position;
+        myAudioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -50,6 +54,17 @@ public class BallScript : MonoBehaviour
         {
             GetComponent<Rigidbody2D>().velocity = new Vector2(launchPosX, launchPosY);
             hasStarted = true;
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (hasStarted)
+        {
+            AudioClip clip = ballSounds[Random.Range(0, ballSounds.Length)];
+            //GetComponent<AudioSource>().Play();
+            myAudioSource.PlayOneShot(clip);
+
         }
     }
 
